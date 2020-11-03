@@ -1,5 +1,7 @@
 import os.path
 
+UBICACION_DIAS = 'dias.csv'
+
 def carga_legajo():
     nombre_archivo = input("Escriba el nombre del archivo: ")
     modo_escritura = "w"
@@ -31,7 +33,39 @@ def carga_legajo():
     menu_principal()
 
 def dias_disponibles():
-    print("hola 2")
+    legajo = input("Ingrese un número de legajo: ")
+    archivo_dias = open(UBICACION_DIAS, "r")
+    lineas = list(archivo_dias)
+    contador = 0
+    total_dias_usados = 0 
+
+    for linea in lineas:
+        if contador > 0:
+            columnas = linea.split(",")
+            legajo_linea = columnas[0]
+            if legajo_linea == legajo:
+                total_dias_usados += 1
+        contador += 1
+    archivo_dias.close()
+
+    nombre_archivo_legajo = input("Escriba el nombre del archivo del legajo: ")
+    
+    if os.path.isfile(nombre_archivo_legajo + ".csv"):
+        archivo_legajo = open(nombre_archivo_legajo + ".csv", "r")
+        lineas2 = list(archivo_legajo)
+        
+        for linea2 in lineas2:
+            columnas2 = linea2.split(",")
+            if columnas2[0] == legajo:
+                total_dias_legajo = columnas2[3]
+                dias_usados = int(total_dias_legajo) - int(total_dias_usados)
+                print("Le quedan disponibles " + str(dias_usados) + " días")
+        
+        archivo_legajo.close()
+    else:
+        print("No existe el archivo")
+    
+    menu_principal()
 
 
 def menu_principal():
